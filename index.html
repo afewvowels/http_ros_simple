@@ -9,18 +9,32 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>
     <link rel="stylesheet" type="text/css" href="./styles.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  </head>
-  <body>
-    <main>
-      <h1 class="title">bertha</h1>
-      <span id="test">Not filled</span>
-      <button onClick=getTopics()>Run</button>
-    </main>
     <script>
       var ros = new ROSLIB.Ros({
         url : 'ws://localhost:9090'
       });
 
+      ros.on('connection', function() {
+        document.getElementById("status").innerHTML = "Connected";
+      });
+
+      ros.on('error', function(error) {
+        document.getElementById("status").innerHTML = "Error";
+      });
+
+      ros.on('close', function() {
+        document.getElementById("status").innerHTML = "Closed";
+      });
+    </script>
+  </head>
+  <body>
+    <main>
+      <h1 class="title">bertha</h1>
+      <span id="status">No status</span>
+      <span id="test">Not filled</span>
+      <button onClick=getTopics()>Run</button>
+    </main>
+    <script>
       function getTopics() {
         var topicsClient = new ROSLIB.Service({
         ros : ros,
